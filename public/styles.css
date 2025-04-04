@@ -1,6 +1,23 @@
 body{
     font-family: Arial, Helvetica, sans-serif;
+    background: #cccccc;
+    width: 80%;
+    margin: 50px auto;
 }
 h1{
-    color: cornflowerblue;
+    color: #74000A;
+    text-align: center;
+    font-size: 28px;
+}
+p{
+    font-size: 20px;
+}
+a{
+    color: #74000A;
+    text-decoration: none;
+}
+a:hover{
+    color: #3e0106;
+    border-bottom: solid 1px #3e0106;
+    
 }
