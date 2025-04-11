@@ -276,6 +276,44 @@ app.get("/api/recordsFemale", (req, res)=>{
     res.send(recordsFemale);
 })
 
+let recordsMale = [
+    {
+        "_id":1,
+        "event":"5K XC",
+        "name":"Victoria Colon-LaBorde",
+        "mark":"15:42",
+        "meet":"McAlpine",
+        "year":"2023"
+    },
+    {
+        "_id":2,
+        "event":"5K Track",
+        "name":"Carina Burdick",
+        "mark":"15:42",
+        "meet":"NIRCA Nationals",
+        "year":"2024"
+    },
+    {
+        "_id":3,
+        "event":"6K XC",
+        "name":"Willie Cuono",
+        "mark":"19:00",
+        "meet":"Mountaineer Invitational",
+        "year":"2022"
+    },
+    {
+        "_id":4,
+        "event":"mile",
+        "name":"Abby Sonderfan",
+        "mark":"5:01",
+        "meet":"USC Open",
+        "year":"2025"
+    },
+];
+app.get("/api/recordsMale", (req, res)=>{
+    res.send(recordsMale);
+})
+
 let schedule = [
     {
         "_id": 1,
@@ -484,6 +522,51 @@ app.post("/api/recordsFemale",upload.single("img"), (req,res)=>{
 });
 
 const validateRecordFemale = (record) => {
+    const schema = Joi.object({
+        _id:Joi.allow(""),
+        event:Joi.string().min(1).required(),
+        name:Joi.string().min(3).required(),
+        mark:Joi.string().min(1).required(),
+        meet:Joi.string().min(1).required(),
+        year:Joi.number().min(2015).required(),
+
+    });
+
+    return schema.validate(record);
+};
+
+
+
+
+//Club Records Male
+app.get("/api/recordsMale", (req, res)=>{
+    res.send(recordsMale);
+});
+
+app.post("/api/recordsMale",upload.single("img"), (req,res)=>{
+    const result = validateRecordMale(req.body);
+
+
+    if(result.error){
+        console.log("I have an error");
+        res.status(400).send(result.error.deatils[0].message);
+        return;
+    }
+
+    const recordFMale = {
+        _id: recordsMale.length,
+        event:req.body.event,
+        name:req.body.name,
+        mark:req.body.mark,
+        meet:req.body.meet,
+        year:req.body.year,
+    };
+
+    recordsMale.push(recordMale);
+    res.status(200).send(recordMale);
+});
+
+const validateRecordMale = (record) => {
     const schema = Joi.object({
         _id:Joi.allow(""),
         event:Joi.string().min(1).required(),
