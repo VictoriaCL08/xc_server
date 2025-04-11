@@ -189,53 +189,91 @@ let events = [
         "_id": 1,
         "event_name": "Track Info Meeting",
         "event_date": "1/30/2025",
-        "event_img": "images/semester-events/track-info-pic.png"
+        "event_img": "track-info-pic.png"
     },
     {
         "_id": 2,
         "event_name": "Valentine's Cookie Run",
         "event_date": "2/14/2025",
-        "event_img": "images/semester-events/cookie-run.png"
+        "event_img": "cookie-run.png"
     },
     {
         "_id": 3,
         "event_name": "Charlotte Outdoor Invite",
         "event_date": "2/22/2025",
-        "event_img": "images/semester-events/track-pic.png"
+        "event_img": "track-pic.png"
     },
     {
         "_id": 4,
         "event_name": "4x4x48",
         "event_date": "2/21/2025-2/22/25",
-        "event_img": "images/semester-events/night-4-4-48-img.png"
+        "event_img": "night-4-4-48-img.png"
     },
     {
         "_id": 5,
         "event_name": "David Go Invitational",
         "event_date": "3/22/2025",
-        "event_img": "images/semester-events/track-meet.png"
+        "event_img": "track-meet.png"
     },
     {
         "_id": 6,
         "event_name": "Bulldog Invitational Weekend Trip",
         "event_date": "3/28/2025",
-        "event_img": "images/semester-events/track-night-img.png"
+        "event_img": "track-night-img.png"
     },
     {
         "_id": 7,
         "event_name": "Palmetto Picnic",
         "event_date": "TBD",
-        "event_img": "images/semester-events/palmetto-picnic.png"
+        "event_img": "palmetto-picnic.png"
     },
     {
         "_id": 8,
         "event_name": "Track Banquet",
         "event_date": "4/24/2025",
-        "event_img": "images/semester-events/banquet-img.png"
+        "event_img": "banquet-img.png"
     }
 ];
 app.get("/api/events", (req,res)=>{
     res.send(events);
+})
+
+let recordsFemale = [
+    {
+        "_id":1,
+        "event":"5K XC",
+        "name":"Victoria Colon-LaBorde",
+        "mark":"15:42",
+        "meet":"McAlpine",
+        "year":"2023"
+    },
+    {
+        "_id":2,
+        "event":"5K Track",
+        "name":"Carina Burdick",
+        "mark":"15:42",
+        "meet":"NIRCA Nationals",
+        "year":"2024"
+    },
+    {
+        "_id":3,
+        "event":"6K XC",
+        "name":"Willie Cuono",
+        "mark":"19:00",
+        "meet":"Mountaineer Invitational",
+        "year":"2022"
+    },
+    {
+        "_id":4,
+        "event":"mile",
+        "name":"Abby Sonderfan",
+        "mark":"5:01",
+        "meet":"USC Open",
+        "year":"2025"
+    },
+];
+app.get("/api/recordsFemale", (req, res)=>{
+    res.send(recordsFemale);
 })
 
 let schedule = [
@@ -283,8 +321,6 @@ let schedule = [
 app.get("/api/schedule", (req, res)=>{
     res.send(schedule);
 })
-
-
 
 //Houses
 app.get("/api/houses", (req, res)=>{
@@ -377,6 +413,91 @@ const validateOfficer = (officer) => {
 
     return schema.validate(officer);
 };
+
+
+//events
+app.get("/api/events", (req, res)=>{
+    res.send(events);
+});
+
+app.post("/api/events", upload.single("img"), (req,res)=>{
+    const result = validateEvent(req.body);
+
+
+    if(result.error){
+        console.log("I have an error");
+        res.status(400).send(result.error.deatils[0].message);
+        return;
+    }
+
+    const event = {
+        _id: events.length,
+        event_name:req.body.event_name,
+        event_date:req.body.event_date,
+    };
+
+    if(req.file){
+        event.event_img =req.file.filename;
+    }
+
+    events.push(event);
+    res.status(200).send(event);
+});
+
+const validateEvent = (event) => {
+    const schema = Joi.object({
+        _id:Joi.allow(""),
+        event_name:Joi.string().min(1).required(),
+        event_date:Joi.string().min(1).required(),
+    });
+
+    return schema.validate(event);
+};
+
+
+//Club Records Female
+app.get("/api/recordsFemale", (req, res)=>{
+    res.send(recordsFemale);
+});
+
+app.post("/api/recordsFemale",upload.single("img"), (req,res)=>{
+    const result = validateRecordFemale(req.body);
+
+
+    if(result.error){
+        console.log("I have an error");
+        res.status(400).send(result.error.deatils[0].message);
+        return;
+    }
+
+    const recordFemale = {
+        _id: recordsFemale.length,
+        event:req.body.event,
+        name:req.body.name,
+        mark:req.body.mark,
+        meet:req.body.meet,
+        year:req.body.year,
+    };
+
+    recordsFemale.push(recordFemale);
+    res.status(200).send(recordFemale);
+});
+
+const validateRecordFemale = (record) => {
+    const schema = Joi.object({
+        _id:Joi.allow(""),
+        event:Joi.string().min(1).required(),
+        name:Joi.string().min(3).required(),
+        mark:Joi.string().min(1).required(),
+        meet:Joi.string().min(1).required(),
+        year:Joi.number().min(2015).required(),
+
+    });
+
+    return schema.validate(record);
+};
+
+
 
 
 app.listen(3001, ()=>{
