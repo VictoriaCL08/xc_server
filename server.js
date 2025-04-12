@@ -265,11 +265,35 @@ let recordsFemale = [
     },
     {
         "_id":4,
-        "event":"mile",
+        "event":"1600 m",
         "name":"Abby Sonderfan",
         "mark":"5:01",
         "meet":"USC Open",
         "year":"2025"
+    },
+    {
+        "_id":5,
+        "event":"800 m",
+        "name":"Katy Hall",
+        "mark":"2:20",
+        "meet":"USC Open",
+        "year":"2025"
+    },
+    {
+        "_id":6,
+        "event":"200 m",
+        "name":"Meridith Moyer",
+        "mark":"0:21",
+        "meet":"Bulldog Invitational",
+        "year":"2023"
+    },
+    {
+        "_id":7,
+        "event":"High Jump",
+        "name":"Sydney Rose",
+        "mark":"10\' 2\"",
+        "meet":"Anderson Track Meet",
+        "year":"2021"
     },
 ];
 app.get("/api/recordsFemale", (req, res)=>{
@@ -280,34 +304,58 @@ let recordsMale = [
     {
         "_id":1,
         "event":"5K XC",
-        "name":"Victoria Colon-LaBorde",
-        "mark":"15:42",
+        "name":"Patrick Champion",
+        "mark":"36:53",
         "meet":"McAlpine",
         "year":"2023"
     },
     {
         "_id":2,
         "event":"5K Track",
-        "name":"Carina Burdick",
-        "mark":"15:42",
-        "meet":"NIRCA Nationals",
-        "year":"2024"
+        "name":"Rylan Dodds",
+        "mark":"14:42",
+        "meet":"NIRCA Regionals",
+        "year":"2017"
     },
     {
         "_id":3,
-        "event":"6K XC",
-        "name":"Willie Cuono",
-        "mark":"19:00",
+        "event":"8K XC",
+        "name":"Brady Pinkerman",
+        "mark":"26:26",
         "meet":"Mountaineer Invitational",
-        "year":"2022"
+        "year":"2026"
     },
     {
         "_id":4,
-        "event":"mile",
-        "name":"Abby Sonderfan",
-        "mark":"5:01",
-        "meet":"USC Open",
-        "year":"2025"
+        "event":"1600 m",
+        "name":"Christian Geils",
+        "mark":"12:43",
+        "meet":"David Go Invitational",
+        "year":"2024"
+    },
+    {
+        "_id":5,
+        "event":"800 m",
+        "name":"Ryan Dixon",
+        "mark":"2:30",
+        "meet":"UGA Invitational",
+        "year":"2022"
+    },
+    {
+        "_id":6,
+        "event":"200 m",
+        "name":"Jack Wegmet",
+        "mark":"0:41",
+        "meet":"Bulldog Invitational",
+        "year":"2023"
+    },
+    {
+        "_id":7,
+        "event":"High Jump",
+        "name":"Drake Byron",
+        "mark":"12\' 2\"",
+        "meet":"UNC Chapel Hill Invitational",
+        "year":"2023"
     },
 ];
 app.get("/api/recordsMale", (req, res)=>{
@@ -553,7 +601,7 @@ app.post("/api/recordsMale",upload.single("img"), (req,res)=>{
         return;
     }
 
-    const recordFMale = {
+    const recordMale = {
         _id: recordsMale.length,
         event:req.body.event,
         name:req.body.name,
