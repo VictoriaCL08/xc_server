@@ -23,222 +23,43 @@ const storage = multer.diskStorage({
 
 
 
+  /*const mongoose = require("mongoose");
+
+  //testdb is name of database, it will automatically make it
+  mongoose
+    .connect("mongodb+srv://VictoriaCL08:6ZIMDy4HR1RqhsJm@cluster0.2fsmm23.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/testdb")
+    .then(() => console.log("Connected to mongodb..."))
+    .catch((err) => console.error("could not connect ot mongodb...", err));
+  
+  const schema = new mongoose.Schema({
+    name: String,
+  });
+  
+  async function createMessage() {
+    const result = await message.save();
+    console.log(result);
+  }
+  
+  //this creates a Message class in our app
+  const Message = mongoose.model("Message", schema);
+  const message = new Message({
+    name: "Hello World",
+  });
+  
+  createMessage();*/
+
+
+
 app.get("/",(req, res)=>{
     res.sendFile(__dirname+"/index.html");
 });
 
 
 
-let houses = [
-    {
-    "_id":1,
-    "name": "Farmhouse",
-    "size": 2000,
-    "bedrooms": 3,
-    "bathrooms": 2.5,
-    "features": [
-    "wrap around porch",
-    "attached garage"
-    ],
-    "main_image": "farm.webp",
-    "floor_plans": [
-    {
-    "name": "Main Level",
-    "image": "farm-floor1.webp"
-    },
-    {
-    "name": "Basement",
-    "image": "farm-floor2.webp"
-    }
-    ]
-    },
-    {
-    "_id":2,
-    "name": "Mountain House",
-    "size": 1700,
-    "bedrooms": 3,
-    "bathrooms": 2,
-    "features": [
-    "grand porch",
-    "covered deck"
-    ],
-    "main_image": "mountain-house.webp",
-    "floor_plans": [
-    {
-    "name": "Main Level",
-    "image": "mountain-house1.webp"
-    },
-    {
-    "name": "Optional Lower Level",
-    "image": "mountain-house2.webp"
-    },
-    {
-    "name": "Main Level Slab Option",
-    "image": "mountain-house3.jpg"
-    }
-    ]
-    },
-    {
-    "_id":3,
-    "name": "Lake House",
-    "size": 3000,
-    "bedrooms": 4,
-    "bathrooms": 3,
-    "features": [
-    "covered deck",
-    "outdoor kitchen",
-    "pool house"
-    ],
-    "main_image": "farm.webp",
-    "floor_plans": [
-    {
-    "name": "Main Level",
-    "image": "lake-house1.webp"
-    },
-    {
-    "name": "Lower Level",
-    "image": "lake-house2.webp"
-    }
-    ]
-    }
-];
-
-app.get("/api/houses", (req, res)=>{
-    res.send(houses);
-});
 
 
-let officers = [
-    {
-        "_id": 1,
-        "position": "Cross Country President",
-        "name": "Carina Burdick",
-        "major": "Excercise Science",
-        "year": "Junior",
-        "hometown": "Irmo, SC",
-        "favorite_event": "1600m",
-        "img": "xc-prez.png"
-    },
-    {
-        "_id": 2,
-        "position": "Track and Field President",
-        "name": "Sydney Rose",
-        "major": "Excercise Science",
-        "year": "Junior",
-        "hometown": "Lexington, KY",
-        "favorite_event": "400m and 4x400m",
-        "img": "track-prez-pic.png"
-    },
-    {
-        "_id": 3,
-        "position": "Vice President",
-        "name": "Ellie Toth",
-        "major": "Biology",
-        "year": "Junior",
-        "hometown": "East Fishkill, NY",
-        "favorite_event": "800m and 1500m",
-        "img": "vp-pic.png"
-    },
-    {
-        "_id": 4,
-        "position": "Treasurer",
-        "name": "Victoria Colon-LaBorde",
-        "major": "Chemical Engineering",
-        "year": "Junior",
-        "hometown": "Aiken, SC",
-        "favorite_event": "5K and 1600 m",
-        "img": "treasurer-pic.png"
-    },
-    {
-        "_id": 5,
-        "position": "Secretary",
-        "name": "Patrick Champion",
-        "major": "Sports Management",
-        "year": "Sophomore",
-        "hometown": "Greenville, SC",
-        "favorite_event": "10K",
-        "img": "secretary-pic.png"
-    },
-    {
-        "_id": 6,
-        "position": "Primary Safety Officer",
-        "name": "Michael Davis",
-        "major": "Exercise Science",
-        "year": "Senior",
-        "hometown": "Columbia, SC",
-        "favorite_event": "Half Marathon",
-        "img": "safety-officer1.png"
-    },
-    {
-        "_id": 7,
-        "position": "Secondary Safety Officer",
-        "name": "Bri Davis",
-        "major": "Nursing",
-        "year": "Junior",
-        "hometown": "Redondo Beach, CA",
-        "favorite_event": "200m",
-        "img": "safety-officer2.png"
-    }
 
-];
-app.get("/api/officers", (req, res)=>{
-    res.send(officers);
-});
 
-let events = [
-
-    {
-        "_id": 1,
-        "event_name": "Track Info Meeting",
-        "event_date": "1/30/2025",
-        "event_img": "track-info-pic.png"
-    },
-    {
-        "_id": 2,
-        "event_name": "Valentine's Cookie Run",
-        "event_date": "2/14/2025",
-        "event_img": "cookie-run.png"
-    },
-    {
-        "_id": 3,
-        "event_name": "Charlotte Outdoor Invite",
-        "event_date": "2/22/2025",
-        "event_img": "track-pic.png"
-    },
-    {
-        "_id": 4,
-        "event_name": "4x4x48",
-        "event_date": "2/21/2025-2/22/25",
-        "event_img": "night-4-4-48-img.png"
-    },
-    {
-        "_id": 5,
-        "event_name": "David Go Invitational",
-        "event_date": "3/22/2025",
-        "event_img": "track-meet.png"
-    },
-    {
-        "_id": 6,
-        "event_name": "Bulldog Invitational Weekend Trip",
-        "event_date": "3/28/2025",
-        "event_img": "track-night-img.png"
-    },
-    {
-        "_id": 7,
-        "event_name": "Palmetto Picnic",
-        "event_date": "TBD",
-        "event_img": "palmetto-picnic.png"
-    },
-    {
-        "_id": 8,
-        "event_name": "Track Banquet",
-        "event_date": "4/24/2025",
-        "event_img": "banquet-img.png"
-    }
-];
-app.get("/api/events", (req,res)=>{
-    res.send(events);
-})
 
 let recordsFemale = [
     {
@@ -411,6 +232,85 @@ app.get("/api/schedule", (req, res)=>{
 })
 
 //Houses
+let houses = [
+    {
+    "_id":1,
+    "name": "Farmhouse",
+    "size": 2000,
+    "bedrooms": 3,
+    "bathrooms": 2.5,
+    "features": [
+    "wrap around porch",
+    "attached garage"
+    ],
+    "main_image": "farm.webp",
+    "floor_plans": [
+    {
+    "name": "Main Level",
+    "image": "farm-floor1.webp"
+    },
+    {
+    "name": "Basement",
+    "image": "farm-floor2.webp"
+    }
+    ]
+    },
+    {
+    "_id":2,
+    "name": "Mountain House",
+    "size": 1700,
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "features": [
+    "grand porch",
+    "covered deck"
+    ],
+    "main_image": "mountain-house.webp",
+    "floor_plans": [
+    {
+    "name": "Main Level",
+    "image": "mountain-house1.webp"
+    },
+    {
+    "name": "Optional Lower Level",
+    "image": "mountain-house2.webp"
+    },
+    {
+    "name": "Main Level Slab Option",
+    "image": "mountain-house3.jpg"
+    }
+    ]
+    },
+    {
+    "_id":3,
+    "name": "Lake House",
+    "size": 3000,
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "features": [
+    "covered deck",
+    "outdoor kitchen",
+    "pool house"
+    ],
+    "main_image": "farm.webp",
+    "floor_plans": [
+    {
+    "name": "Main Level",
+    "image": "lake-house1.webp"
+    },
+    {
+    "name": "Lower Level",
+    "image": "lake-house2.webp"
+    }
+    ]
+    }
+];
+
+app.get("/api/houses", (req, res)=>{
+    res.send(houses);
+});
+
+
 app.post("/api/houses", upload.single("img"), (req,res)=>{
     const result = validateHouse(req.body);
 
@@ -496,6 +396,80 @@ const validateHouse = (house) => {
 };
 
 //Officers
+let officers = [
+    {
+        "_id":1,
+        "position": "Cross Country President",
+        "name": "Carina Burdick",
+        "major": "Excercise Science",
+        "year": "Junior",
+        "hometown": "Irmo, SC",
+        "favorite_event": "1600m",
+        "img": "xc-prez.png"
+    },
+    {
+        "_id":2,
+        "position": "Track and Field President",
+        "name": "Sydney Rose",
+        "major": "Excercise Science",
+        "year": "Junior",
+        "hometown": "Lexington, KY",
+        "favorite_event": "400m and 4x400m",
+        "img": "track-prez-pic.png"
+    },
+    {
+        "_id":3,
+        "position": "Vice President",
+        "name": "Ellie Toth",
+        "major": "Biology",
+        "year": "Junior",
+        "hometown": "East Fishkill, NY",
+        "favorite_event": "800m and 1500m",
+        "img": "vp-pic.png"
+    },
+    {
+        "_id":4,
+        "position": "Treasurer",
+        "name": "Victoria Colon-LaBorde",
+        "major": "Chemical Engineering",
+        "year": "Junior",
+        "hometown": "Aiken, SC",
+        "favorite_event": "5K and 1600 m",
+        "img": "treasurer-pic.png"
+    },
+    {
+        "_id":5,
+        "position": "Secretary",
+        "name": "Patrick Champion",
+        "major": "Sports Management",
+        "year": "Sophomore",
+        "hometown": "Greenville, SC",
+        "favorite_event": "10K",
+        "img": "secretary-pic.png"
+    },
+    {
+        "_id":6,
+        "position": "Primary Safety Officer",
+        "name": "Michael Davis",
+        "major": "Exercise Science",
+        "year": "Senior",
+        "hometown": "Columbia, SC",
+        "favorite_event": "Half Marathon",
+        "img": "safety-officer1.png"
+    },
+    {
+        "_id":7,
+        "position": "Secondary Safety Officer",
+        "name": "Bri Davis",
+        "major": "Nursing",
+        "year": "Junior",
+        "hometown": "Redondo Beach, CA",
+        "favorite_event": "200m",
+        "img": "safety-officer2.png"
+    }
+
+];
+
 app.get("/api/officers", (req, res)=>{
     res.send(officers);
 });
@@ -528,6 +502,51 @@ app.post("/api/officers", upload.single("img"), (req,res)=>{
     res.status(200).send(officer);
 });
 
+app.put("/api/officers/:id", upload.single("img"),(req,res)=>{
+    const officer = officers.find((officer)=>officer._id===parseInt(req.params.id));
+    
+    if(!officer){
+        res.status(404).send("The house with the provided id was not found");
+        return;
+    }
+
+    const result = validateOfficer(req.body);
+
+    if(result.error){
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+
+    officer.position = req.body.position;
+    officer.name = req.body.name;
+    officer.major = req.body.major;
+    officer.year = req.body.year;
+    officer.hometown = req.body.hometown;
+    officer.favorite_event = req.body.favorite_event;
+
+    if(req.file){
+        officer.img = req.file.filename;
+    }
+
+    res.status(200).send(officer);
+});
+
+app.delete("/api/officers/:id",(req,res)=>{
+    console.log("I'm trying to delete" + req.params.id);
+    const officer = officers.find((officer)=>officer._id===parseInt(req.params.id));
+
+    if(!officer){
+        console.log("Oh no i wasn't found");
+        res.status(404).send("The officer with the provided id was not found");
+        return;
+    }
+    console.log("YAY You found me");
+    console.log("The offcer you are deleting is " + officer.name);
+    const index = officers.indexOf(officer);
+    officers.splice(index,1);
+    res.status(200).send(officer);
+});
+
 const validateOfficer = (officer) => {
     const schema = Joi.object({
         _id:Joi.allow(""),
@@ -543,7 +562,145 @@ const validateOfficer = (officer) => {
 };
 
 
+
+
+
+
 //events
+let events = [
+
+    {
+        "_id": 1,
+        "event_name": "Track Info Meeting",
+        "event_date": "1/30/2025",
+        "event_img": "track-info-pic.png"
+    },
+    {
+        "_id": 2,
+        "event_name": "Valentine's Cookie Run",
+        "event_date": "2/14/2025",
+        "event_img": "cookie-run.png"
+    },
+    {
+        "_id": 3,
+        "event_name": "Charlotte Outdoor Invite",
+        "event_date": "2/22/2025",
+        "event_img": "track-pic.png"
+    },
+    {
+        "_id": 4,
+        "event_name": "4x4x48",
+        "event_date": "2/21/2025-2/22/25",
+        "event_img": "night-4-4-48-img.png"
+    },
+    {
+        "_id": 5,
+        "event_name": "David Go Invitational",
+        "event_date": "3/22/2025",
+        "event_img": "track-meet.png"
+    },
+    {
+        "_id": 6,
+        "event_name": "Bulldog Invitational Weekend Trip",
+        "event_date": "3/28/2025",
+        "event_img": "track-night-img.png"
+    },
+    {
+        "_id": 7,
+        "event_name": "Palmetto Picnic",
+        "event_date": "TBD",
+        "event_img": "palmetto-picnic.png"
+    },
+    {
+        "_id": 8,
+        "event_name": "Track Banquet",
+        "event_date": "4/24/2025",
+        "event_img": "banquet-img.png"
+    }
+];
+app.get("/api/events", (req,res)=>{
+    res.send(events);
+})
+
+app.post("/api/events", upload.single("img"), (req,res)=>{
+    const result = validateEvent(req.body);
+
+
+    if(result.error){
+        console.log("I have an error");
+        res.status(400).send(result.error.deatils[0].message);
+        return;
+    }
+
+    const event = {
+        _id: events.length,
+        event_name:req.body.event_name,
+        event_date:req.body.event_date,
+    };
+
+    //adding image
+    if(req.file){
+        event.event_img = req.file.filename;
+    }
+
+    events.push(event);
+    res.status(200).send(event);
+});
+
+app.put("/api/events/:id", upload.single("img"),(req,res)=>{
+    const event = events.find((event)=>event._id===parseInt(req.params.id));
+
+    if(!event){
+        res.status(404).send("The event with the provided id was not found");
+        return;
+    }
+
+    const result = validateEvent(req.body);
+
+    if(result.error){
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+
+    event.event_name = req.body.event_name;
+    event.event_date = req.body.event_date;
+
+    if(req.file){
+        event.event_img = req.file.filename;
+    }
+
+    res.status(200).send(event);
+});
+
+app.delete("/api/events/:id",(req,res)=>{
+    console.log("I'm trying to delete " + req.params.id);
+    const event = events.find((event)=>event._id===parseInt(req.params.id));
+
+    if(!event){
+        console.log("Oh no i wasn't found");
+        res.status(404).send("The house with the provided id was not found");
+        return;
+    }
+    console.log("YAY You found me");
+    console.log("The house you are deleting is " + event.name);
+    const index = events.indexOf(event);
+    events.splice(index,1);
+    res.status(200).send(event);
+});
+
+const validateEvent = (event) => {
+    const schema = Joi.object({
+        _id:Joi.allow(""),
+        event_name:Joi.string().min(1).required(),
+        event_date:Joi.string().required().min(1),
+
+    });
+
+    return schema.validate(event);
+};
+
+
+/*
 app.get("/api/events", (req, res)=>{
     res.send(events);
 });
@@ -581,7 +738,7 @@ const validateEvent = (event) => {
 
     return schema.validate(event);
 };
-
+*/
 
 //Club Records Female
 app.get("/api/recordsFemale", (req, res)=>{
