@@ -61,67 +61,7 @@ app.get("/",(req, res)=>{
 
 
 
-let recordsFemale = [
-    {
-        "_id":1,
-        "event":"5K XC",
-        "name":"Victoria Colon-LaBorde",
-        "mark":"15:42",
-        "meet":"McAlpine",
-        "year":"2023"
-    },
-    {
-        "_id":2,
-        "event":"5K Track",
-        "name":"Carina Burdick",
-        "mark":"15:42",
-        "meet":"NIRCA Nationals",
-        "year":"2024"
-    },
-    {
-        "_id":3,
-        "event":"6K XC",
-        "name":"Willie Cuono",
-        "mark":"19:00",
-        "meet":"Mountaineer Invitational",
-        "year":"2022"
-    },
-    {
-        "_id":4,
-        "event":"1600 m",
-        "name":"Abby Sonderfan",
-        "mark":"5:01",
-        "meet":"USC Open",
-        "year":"2025"
-    },
-    {
-        "_id":5,
-        "event":"800 m",
-        "name":"Katy Hall",
-        "mark":"2:20",
-        "meet":"USC Open",
-        "year":"2025"
-    },
-    {
-        "_id":6,
-        "event":"200 m",
-        "name":"Meridith Moyer",
-        "mark":"0:21",
-        "meet":"Bulldog Invitational",
-        "year":"2023"
-    },
-    {
-        "_id":7,
-        "event":"High Jump",
-        "name":"Sydney Rose",
-        "mark":"10\' 2\"",
-        "meet":"Anderson Track Meet",
-        "year":"2021"
-    },
-];
-app.get("/api/recordsFemale", (req, res)=>{
-    res.send(recordsFemale);
-})
+
 
 let recordsMale = [
     {
@@ -700,50 +640,68 @@ const validateEvent = (event) => {
 };
 
 
-/*
-app.get("/api/events", (req, res)=>{
-    res.send(events);
-});
-
-app.post("/api/events", upload.single("img"), (req,res)=>{
-    const result = validateEvent(req.body);
-
-
-    if(result.error){
-        console.log("I have an error");
-        res.status(400).send(result.error.deatils[0].message);
-        return;
-    }
-
-    const event = {
-        _id: events.length,
-        event_name:req.body.event_name,
-        event_date:req.body.event_date,
-    };
-
-    if(req.file){
-        event.event_img =req.file.filename;
-    }
-
-    events.push(event);
-    res.status(200).send(event);
-});
-
-const validateEvent = (event) => {
-    const schema = Joi.object({
-        _id:Joi.allow(""),
-        event_name:Joi.string().min(1).required(),
-        event_date:Joi.string().min(1).required(),
-    });
-
-    return schema.validate(event);
-};
-*/
-
 //Club Records Female
+let recordsFemale = [
+    {
+        "_id":1,
+        "event":"5K XC",
+        "name":"Victoria Colon-LaBorde",
+        "mark":"15:42",
+        "meet":"McAlpine",
+        "year":"2023"
+    },
+    {
+        "_id":2,
+        "event":"5K Track",
+        "name":"Carina Burdick",
+        "mark":"15:42",
+        "meet":"NIRCA Nationals",
+        "year":"2024"
+    },
+    {
+        "_id":3,
+        "event":"6K XC",
+        "name":"Willie Cuono",
+        "mark":"19:00",
+        "meet":"Mountaineer Invitational",
+        "year":"2022"
+    },
+    {
+        "_id":4,
+        "event":"1600 m",
+        "name":"Abby Sonderfan",
+        "mark":"5:01",
+        "meet":"USC Open",
+        "year":"2025"
+    },
+    {
+        "_id":5,
+        "event":"800 m",
+        "name":"Katy Hall",
+        "mark":"2:20",
+        "meet":"USC Open",
+        "year":"2025"
+    },
+    {
+        "_id":6,
+        "event":"200 m",
+        "name":"Meridith Moyer",
+        "mark":"0:21",
+        "meet":"Bulldog Invitational",
+        "year":"2023"
+    },
+    {
+        "_id":7,
+        "event":"High Jump",
+        "name":"Sydney Rose",
+        "mark":"10\' 2\"",
+        "meet":"Anderson Track Meet",
+        "year":"2021"
+    },
+];
 app.get("/api/recordsFemale", (req, res)=>{
     res.send(recordsFemale);
-});
+})
 
 app.post("/api/recordsFemale",upload.single("img"), (req,res)=>{
     const result = validateRecordFemale(req.body);
@@ -767,6 +725,47 @@ app.post("/api/recordsFemale",upload.single("img"), (req,res)=>{
     recordsFemale.push(recordFemale);
     res.status(200).send(recordFemale);
 });
+
+
+/*app.put("/api/recordsFemale/:id", upload.single("img"),(req,res)=>{
+    const recordFemale = recordsFemale.find((recordFemale)=>recordFemale._id===parseInt(req.params.id));
+
+    if(!recordFemale){
+        res.status(404).send("The record with the provided id was not found");
+        return;
+    }
+
+    const result = validateRecordFemale(req.body);
+
+    if(result.error){
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+    recordFemale.event = req.body.event;
+    recordFemale.name = req.body.name;
+    recordFemale.mark = req.body.mark;
+    recordFemale.meet = req.body.meet;
+    recordFemale.year = req.body.year;
+
+
+    res.status(200).send(recordFemale);
+});
+
+app.delete("/api/recordsFemale/:id",(req,res)=>{
+    console.log("I'm trying to delete" + req.params.id);
+    const recordFemale = recordsFemale.find((recordFemale)=>recordFemale._id===parseInt(req.params.id));
+
+    if(!recordFemale){
+        console.log("Oh no i wasn't found");
+        res.status(404).send("The record with the provided id was not found");
+        return;
+    }
+    console.log("YAY You found me");
+    console.log("The record you are deleting is " + recordFemale.name);
+    const index = recordsFemale.indexOf(recordFemale);
+    recordsFemale.splice(index,1);
+    res.status(200).send(recordFemale);
+});*/
 
 const validateRecordFemale = (record) => {
     const schema = Joi.object({
