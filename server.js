@@ -2,7 +2,8 @@
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-const Joi = require("joi")
+const Joi = require("joi");
+const mongoose = require("mongoose");
 const app = express();
 app.use(express.static("public"));
 app.use(express.json());
@@ -22,14 +23,35 @@ const storage = multer.diskStorage({
 
 
 
-
-  /*const mongoose = require("mongoose");
-
-  //testdb is name of database, it will automatically make it
   mongoose
-    .connect("mongodb+srv://VictoriaCL08:6ZIMDy4HR1RqhsJm@cluster0.2fsmm23.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/testdb")
-    .then(() => console.log("Connected to mongodb..."))
-    .catch((err) => console.error("could not connect ot mongodb...", err));
+  .connect("mongodb+srv://VictoriaCL08:6ZIMDy4HR1RqhsJm@cluster0.2fsmm23.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+  .then(() => {
+    console.log("connected to mongodb");
+  })
+  .catch((error) => {
+    console.log("couldn't connect to mongodb", error);
+  });
+
+const officerSchema = new mongoose.Schema({///////////////////////////////////
+    position:String,
+    name:String,
+    major:String,
+    year:String,
+    hometown:String,
+    favorite_event:String,
+    img:String
+});
+
+const Officer = mongoose.model("Officer", officerSchema);
+
+const eventSchema = new mongoose.Schema({
+    event_name:String,
+    event_date:String,
+    event_img:String
+});
+
+const Event = mongoose.model("Event", eventSchema);
+/*
   
   const schema = new mongoose.Schema({
     name: String,
@@ -46,21 +68,13 @@ const storage = multer.diskStorage({
     name: "Hello World",
   });
   
-  createMessage();*/
+  createMessage();
 
-
+*/
 
 app.get("/",(req, res)=>{
     res.sendFile(__dirname+"/index.html");
 });
-
-
-
-
-
-
-
-
 
 
 let recordsMale = [
@@ -172,7 +186,7 @@ app.get("/api/schedule", (req, res)=>{
 })
 
 //Houses
-let houses = [
+/*let houses = [
     {
     "_id":1,
     "name": "Farmhouse",
@@ -244,9 +258,9 @@ let houses = [
     }
     ]
     }
-];
+];*/
 
-app.get("/api/houses", (req, res)=>{
+/*app.get("/api/houses", (req, res)=>{
     res.send(houses);
 });
 
@@ -334,9 +348,9 @@ const validateHouse = (house) => {
 
     return schema.validate(house);
 };
-
+*/
 //Officers
-let officers = [
+/*let officers = [
     {
         "_id":1,
         "position": "Cross Country President",
@@ -408,13 +422,14 @@ let officers = [
         "img": "safety-officer2.png"
     }
 
-];
+];*/
 
-app.get("/api/officers", (req, res)=>{
+app.get("/api/officers", async (req, res)=>{
+    const officers = await Officer.find();/////////////////////////////////////////////////////////////////////
     res.send(officers);
 });
 
-app.post("/api/officers", upload.single("img"), (req,res)=>{
+app.post("/api/officers", upload.single("img"), async (req,res)=>{
     const result = validateOfficer(req.body);
 
 
@@ -424,31 +439,30 @@ app.post("/api/officers", upload.single("img"), (req,res)=>{
         return;
     }
 
-    const officer = {
-        _id: officers.length,
+    const officer = new Officer({/////////////////////////////////////////////////////////////
         position:req.body.position,
         name:req.body.name,
         major:req.body.major,
         year:req.body.year,
         hometown: req.body.hometown,
         favorite_event:req.body.favorite_event,
-    };
-
+    });
     if(req.file){
         officer.img =req.file.filename;
     }
 
-    officers.push(officer);
-    res.status(200).send(officer);
+    const newOfficer = await officer.save();
+    res.status(200).send(newOfficer);///////////////////////////////////
 });
 
-app.put("/api/officers/:id", upload.single("img"),(req,res)=>{
-    const officer = officers.find((officer)=>officer._id===parseInt(req.params.id));
+app.put("/api/officers/:id", upload.single("img"),async(req,res)=>{
+
+    /*const officer = officers.find((officer)=>officer._id===parseInt(req.params.id));
     
     if(!officer){
-        res.status(404).send("The house with the provided id was not found");
+        res.status(404).send("The officer with the provided id was not found");
         return;
-    }
+    }*/
 
     const result = validateOfficer(req.body);
 
@@ -457,22 +471,31 @@ app.put("/api/officers/:id", upload.single("img"),(req,res)=>{
         return;
     }
 
-    officer.position = req.body.position;
-    officer.name = req.body.name;
-    officer.major = req.body.major;
-    officer.year = req.body.year;
-    officer.hometown = req.body.hometown;
-    officer.favorite_event = req.body.favorite_event;
+    const fieldsToUpdate = {
+        position:req.body.position,
+        name:req.body.name,
+        major:req.body.major,
+        year:req.body.year,
+        hometown:req.body.hometown,
+        favorite_event:req.body.favorite_event
+    }
+
 
     if(req.file){
-        officer.img = req.file.filename;
+        fieldsToUpdate.img = req.file.filename;
+        //officer.img = req.file.filename;
     }
+
+
+    const wentThrough = await Officer.updateOne({_id:req.params.id}, fieldsToUpdate);
+    const officer = await Officer.findOne({_id:req.params.id});
+
 
     res.status(200).send(officer);
 });
 
-app.delete("/api/officers/:id",(req,res)=>{
-    console.log("I'm trying to delete" + req.params.id);
+app.delete("/api/officers/:id",async(req,res)=>{
+    /*console.log("I'm trying to delete" + req.params.id);
     const officer = officers.find((officer)=>officer._id===parseInt(req.params.id));
 
     if(!officer){
@@ -483,7 +506,8 @@ app.delete("/api/officers/:id",(req,res)=>{
     console.log("YAY You found me");
     console.log("The offcer you are deleting is " + officer.name);
     const index = officers.indexOf(officer);
-    officers.splice(index,1);
+    officers.splice(index,1);*/
+    const officer = await Officer.findByIdAndDelete(req.params.id);
     res.status(200).send(officer);
 });
 
@@ -502,12 +526,8 @@ const validateOfficer = (officer) => {
 };
 
 
-
-
-
-
 //events
-let events = [
+/*let events = [
 
     {
         "_id": 1,
@@ -557,12 +577,13 @@ let events = [
         "event_date": "4/24/2025",
         "event_img": "banquet-img.png"
     }
-];
-app.get("/api/events", (req,res)=>{
+];*/
+app.get("/api/events", async(req,res)=>{
+    const events = await Event.find();
     res.send(events);
 })
 
-app.post("/api/events", upload.single("img"), (req,res)=>{
+app.post("/api/events", upload.single("img"), async(req,res)=>{
     const result = validateEvent(req.body);
 
 
@@ -572,28 +593,27 @@ app.post("/api/events", upload.single("img"), (req,res)=>{
         return;
     }
 
-    const event = {
-        _id: events.length,
+    const event = new Event ({
         event_name:req.body.event_name,
         event_date:req.body.event_date,
-    };
+    });
 
     //adding image
     if(req.file){
         event.event_img = req.file.filename;
     }
 
-    events.push(event);
-    res.status(200).send(event);
+    const newEvent = await event.save();
+    res.status(200).send(newEvent);
 });
 
-app.put("/api/events/:id", upload.single("img"),(req,res)=>{
-    const event = events.find((event)=>event._id===parseInt(req.params.id));
+app.put("/api/events/:id", upload.single("img"),async(req,res)=>{
+    /*const event = events.find((event)=>event._id===parseInt(req.params.id));
 
     if(!event){
         res.status(404).send("The event with the provided id was not found");
         return;
-    }
+    }*/
 
     const result = validateEvent(req.body);
 
@@ -602,29 +622,25 @@ app.put("/api/events/:id", upload.single("img"),(req,res)=>{
         return;
     }
 
-    event.event_name = req.body.event_name;
-    event.event_date = req.body.event_date;
+
+    const fieldsToUpdate = {
+        event_name:req.body.event_name,
+        event_date:req.body.event_date 
+    }
+  
 
     if(req.file){
-        event.event_img = req.file.filename;
+        fieldsToUpdate.event_img = req.file.filename;
     }
+
+    const wentThrough = await Event.updateOne({_id:req.params.id}, fieldsToUpdate);
+    const event = await Event.findOne({_id:req.params.id});
 
     res.status(200).send(event);
 });
 
-app.delete("/api/events/:id",(req,res)=>{
-    console.log("I'm trying to delete " + req.params.id);
-    const event = events.find((event)=>event._id===parseInt(req.params.id));
-
-    if(!event){
-        console.log("Oh no i wasn't found");
-        res.status(404).send("The house with the provided id was not found");
-        return;
-    }
-    console.log("YAY You found me");
-    console.log("The house you are deleting is " + event.name);
-    const index = events.indexOf(event);
-    events.splice(index,1);
+app.delete("/api/events/:id",async(req,res)=>{
+    const event = await Event.findByIdAndDelete(req.params.id);
     res.status(200).send(event);
 });
 
